@@ -101,7 +101,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="alumno in alumnos" :key="alumno.idAlumno" v-on:clik='modificarAlumno(alumno)'  >
+                <tr v-for="alumno in alumnos" @click='modificarAlumno(alumno)' :key="alumno.idAlumno" >
                   <td>{{alumno.codigo}}</td>
                   <td>{{alumno.nombre}}</td>
                   <td>{{alumno.direccion}}</td>
@@ -110,7 +110,7 @@
                   <td>{{alumno.telefono}}</td>
                   <td>{{alumno.nacimiento}}</td>
                   <td>{{alumno.sexo}}</td>
-                  <td><button @click-prevent="eliminarAlumno(alumno)" class="btn btn-danger">Eliminar</button></td>
+                  <td><button @click.prevent="eliminarAlumno(alumno)" class="btn btn-danger">Eliminar</button></td>
                 </tr>
               </tbody>
             </table>
@@ -146,7 +146,6 @@
       }
     },
     methods:{
-
       nuevoAlumno(){
         this.accion = 'nuevo';
         this.alumno.idAlumno = '';
@@ -159,30 +158,28 @@
         this.alumno.nacimiento = '';
         this.alumno.sexo = '';
       },
-      modificarAlumno(){
-        this.accion = 'mdificar';
+      modificarAlumno(alumno){
+        this.accion = 'modificar';
         this.alumno = alumno;
-        console.log(alumno);
+        
       },
       guardarAlumno(){
         this.listarAlumnos();
-        if(this.accion=='nuevo'){
+        if(this.accion==='nuevo'){
           this.alumno.idAlumno = new Date().getTime().toString(16); //las cantidad milisegundo y lo convierte en hexadecimal
           this.alumnos.push(JSON.parse(JSON.stringify(this.alumno)));
-        }
-        else if(this.accion=='modificar'){
+        }else if(this.accion==='modificar'){
           //hacer la busqueda y modificar el registro
           let index = this.alumnos.findIndex(alumno=>alumno.idAlumno==this.alumno.idAlumno);
-          this.alumnos[index] = JSON.parse(JSON.stringify(this.docente));
-        }
-        else if(this.accion=='eliminar'){
-          let index = this.alumno.findIndex(alumno=>alumno.idAlumno==this.alumno.idAlumno);
-          this.alumno.splice(index, 1);
+          this.alumnos[index] = JSON.parse(JSON.stringify(this.alumno));
+        }else if(this.accion==='eliminar'){
+          let index = this.alumnos.findIndex(alumno=>alumno.idAlumno==this.alumno.idAlumno);
+          this.alumnos.splice(index, 1);
         }
         localStorage.setItem('alumnos',JSON.stringify(this.alumnos));
         this.nuevoAlumno();
       },
-      eliminarAlumno(){
+      eliminarAlumno(alumno){
         if(confirm(`Esta seguro de eliminar el docente ${alumno.nombre}?`)){
           this.accion = "eliminar";
           this.alumno = alumno;
