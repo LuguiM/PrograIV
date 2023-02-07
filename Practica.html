@@ -81,32 +81,40 @@
       <div class="card text-bg-light" >
         <div class="card-header" >CONSULTA DE ALUMNOS</div>
         <div class="card-body">
-          <table class="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th>CODIGO</th>
-                <th>NOMBRE</th>
-                <th>DIRECCION</th>
-                <th>MUNICIPIO</th>
-                <th>DEPARTAMENTO</th>
-                <th>TELEFONO</th>
-                <th>FECHA DE NACIMIENTO</th>
-                <th>SEXO</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="alumno in alumnos" :key="alumno.idAlumno">
-                <td>{{alumno.codigo}}</td>
-                <td>{{alumno.nombre}}</td>
-                <td>{{alumno.direccion}}</td>
-                <td>{{alumno.municipio}}</td>
-                <td>{{alumno.departamento}}</td>
-                <td>{{alumno.telefono}}</td>
-                <td>{{alumno.nacimiento}}</td>
-                <td>{{alumno.sexo}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <form>
+            <table class="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th>BUSCAR</th>
+                  <th colspan="2"><input type="text" @keyup="listarAlumnos()" class="form-control" 
+                    v-model="buscar" placeholder="Buscar por nombre"></th>
+                </tr>
+                <tr>
+                  <th>CODIGO</th>
+                  <th>NOMBRE</th>
+                  <th>DIRECCION</th>
+                  <th>MUNICIPIO</th>
+                  <th>DEPARTAMENTO</th>
+                  <th>TELEFONO</th>
+                  <th>FECHA DE NACIMIENTO</th>
+                  <th colspan="2">SEXO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="alumno in alumnos" :key="alumno.idAlumno" v-on:clik='modificarAlumno(alumno)'  >
+                  <td>{{alumno.codigo}}</td>
+                  <td>{{alumno.nombre}}</td>
+                  <td>{{alumno.direccion}}</td>
+                  <td>{{alumno.municipio}}</td>
+                  <td>{{alumno.departamento}}</td>
+                  <td>{{alumno.telefono}}</td>
+                  <td>{{alumno.nacimiento}}</td>
+                  <td>{{alumno.sexo}}</td>
+                  <td><button @click-prevent="eliminarAlumno(alumno)" class="btn btn-danger">Eliminar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
         </div>
       </div>
     </div>
@@ -121,7 +129,9 @@
   createApp({
     data(){
       return{
+        buscar:'',
         alumnos:[],
+        accion: 'nuevo',
         alumno:{
           idAlumno:0,
           codigo:'',
@@ -136,7 +146,9 @@
       }
     },
     methods:{
+
       nuevoAlumno(){
+        this.accion = 'nuevo';
         this.alumno.idAlumno = '';
         this.alumno.codigo = '';
         this.alumno.nombre = '';
@@ -147,18 +159,43 @@
         this.alumno.nacimiento = '';
         this.alumno.sexo = '';
       },
+      modificarAlumno(){
+        this.accion = 'mdificar';
+        this.alumno = alumno;
+        console.log(alumno);
+      },
       guardarAlumno(){
-        this.alumnos = this.listarAlumnos();
-        this.alumnos.push(this.alumno)
-        localStorage.setItem('alumno',JSON.stringify(this.alumnos));
+        this.listarAlumnos();
+        if(this.accion=='nuevo'){
+          this.alumno.idAlumno = new Date().getTime().toString(16); //las cantidad milisegundo y lo convierte en hexadecimal
+          this.alumnos.push(JSON.parse(JSON.stringify(this.alumno)));
+        }
+        else if(this.accion=='modificar'){
+          //hacer la busqueda y modificar el registro
+          let index = this.alumnos.findIndex(alumno=>alumno.idAlumno==this.alumno.idAlumno);
+          this.alumnos[index] = JSON.parse(JSON.stringify(this.docente));
+        }
+        else if(this.accion=='eliminar'){
+          let index = this.alumno.findIndex(alumno=>alumno.idAlumno==this.alumno.idAlumno);
+          this.alumno.splice(index, 1);
+        }
+        localStorage.setItem('alumnos',JSON.stringify(this.alumnos));
         this.nuevoAlumno();
       },
-      listarAlumnos(){
-        return JSON.parse( localStorage.getItem('alumnos') ||  "[]" );
+      eliminarAlumno(){
+        if(confirm(`Esta seguro de eliminar el docente ${alumno.nombre}?`)){
+          this.accion = "eliminar";
+          this.alumno = alumno;
+          this.guardarAlumno();
+
+        }
+      },
+      listarAlumnos(buscar = ''){
+        this.alumnos = JSON.parse( localStorage.getItem('alumnos') ||  "[]" ).filter(alumno=>alumno.nombre.toLowerCase().indexOf(this.buscar.toLowerCase())>-1);
       }
     },
     created(){
-      this.alumnos = this.listarAlumnos();
+      this.listarAlumnos();
     }
   }).mount('#app')
 </script>
