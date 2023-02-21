@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <title>::.PRIMER PARCIAL.::</title>
+</head>
+<body>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="card text-bg-success mb-3" style="max-width: 45rem;">
+                <div class="card-header">Formulario de Libros</div>
+                <div class="card-body">
+                  <form id="frmLibro"  @submit.prevent="guardarLibro" @reset.prevent="nuevoLibro()">
+                    <div class="row p-1">
+                        <div class="col-3 col-md-3">AUTOR:</div>
+                        <div class="col col-md-6">
+                        <input required class="form-control" type="text" v-model="libro.autor" name="txtAutorLibro" id="txtAutorLibro">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-3 col-md-3">ISBN(codigo):</div>
+                        <div class="col col-md-6">
+                        <input required pattern="^[0-9]{13}" class="form-control" type="text" v-model="libro.codigo" name="txtCodigoLibro" id="txtCodigoLibro">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-3 col-md-3">TITULO:</div>
+                        <div class="col col-md-6">
+                        <input class="form-control" type="text" v-model="libro.titulo" name="txtTituloLibro" id="txtTituloLibro">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-3 col-md-3">EDITORIAL:</div>
+                        <div class="col col-md-6">
+                        <input class="form-control" type="text" v-model="libro.editorial" name="txtEditorialLibro" id="txtEditorialLibro">
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col col md-6">
+                        <input class="btn btn-primary" type="submit" value="Guardar Datos">
+                        </div>
+                        <div class="col col md-6">
+                        <input class="btn btn-warning" type="reset" value="Nuevo Registro">
+                        </div>
+                  </form>
+
+                </div>
+              </div>
+        </div>
+
+        <br>
+            <div class="row ">
+                <div class="col-12 col-md-10">
+                  <div class="card text-bg-light" >
+                    <div class="card-header" >CONSULTA DE LIBROS</div>
+                      <div class="card-body">
+                              <form>
+                                  <table class="table table-dark table-hover">
+                                      <thead>
+                                      <tr>
+                                          <th>BUSCAR</th>
+                                          <th colspan="2"><input type="text" @keyup="listarLibros()" class="form-control" 
+                                          v-model="buscar" placeholder="Buscar por nombre"></th>
+                                      </tr>
+                                      <tr>
+                                          <th>AUTOR</th>
+                                          <th>ISBN(Codigo)</th>
+                                          <th>TITULO</th>
+                                          <th colspan="2">EDITORIAL</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      <tr v-for="libro in libros" @click='modificarLibro(libro)' :key="libro.idLibro" >
+                                          <td>{{libro.autor}}</td>
+                                          <td>{{libro.codigo}}</td>
+                                          <td>{{libro.titulo}}</td>
+                                          <td>{{libro.editorial}}</td>
+                                          <td><button @click.prevent="eliminarLibro(libro)" class="btn btn-danger">Eliminar</button></td>
+                                      </tr>
+                                      </tbody>
+                                  </table>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>  
+
+    <script>
+    const {createApp} = Vue;
+    createApp({
+    data(){
+      return{
+        db:'',
+        buscar:'',
+        libros:[],
+        accion: 'nuevo',
+        libro:{
+          idLibro:'',
+          autor:'',
+          codigo:'',
+          titulo:'',
+          editorial:'',
+        }
+      }
+    },
+    methods:{
+        nuevoLibro(){
+          this.accion = 'nuevo';
+          this.libro.idLibro = '';
+          this.libro.autor = '';
+          this.libro.codigo = '';
+          this.libro.titulo = '';
+          this.libro.editorial = '';
+        },
+        modificarLibro(libro){
+          this.accion = 'modificar';
+          this.libro = libro;
+          
+        },
+        guardarLibro(){
+          if(this.libro.autor=='' || this.libro.titulo==''){
+            console.log('Por favor ingrese los datos correspondientes');
+            return;
+          }
+          let store = this.abrirStore('tbllibros','readwrite');
+          if(this.accion==='nuevo'){
+            this.libro.idLibro = new Date().getTime().toString(16); //las cantidad milisegundo y lo convierte en hexadecimal
+            
+          }
+          let query = store.put( JSON.parse( JSON.stringify(this.libro)));
+          query.onsuccess = resp=>{
+            this.nuevoLibro();
+            this.listarLibros();
+          };
+          query.onerror = err=>{
+            console.error('ERROR al guardar alumno', err);
+          };
+          
+        },
+        eliminarLibro(libro){
+          if(confirm(`Esta seguro de eliminar el docente ${libro.titulo}?`)){
+            let store = this.abrirStore('tbllibros','readwrite'),
+                req = store.delete(libro.idLibro);
+                req.onsuccess = res=>{
+                  this.listarLibros();
+                };
+                req.onerror = err=>{
+                  console.error('ERROR al guardar alumno')
+                };
+          }
+        },
+        listarLibros(){
+          let store = this.abrirStore('tbllibros','readonly'),
+              data = store.getAll();
+            data.onsuccess = resp=>{
+            this.libros = data.result.filter(libro=>libro.autor.toLowerCase().indexOf(this.buscar.toLowerCase())>-1 || libro.titulo.toLowerCase().indexOf(this.buscar.toLowerCase())>-1);
+        };
+    },
+    abrirBD(){
+        let indexDB = indexedDB.open('db_usis043721_luis',1);
+        indexDB.onupgradeneeded = e=>{
+          let req = e.target.result,
+            tbllibros = req.createObjectStore('tbllibros',{keyPath: 'idLibro'});
+            
+            tbllibros.createIndex('idLibro','idLibro',{unique:true});
+        };
+        indexDB.onsuccess = e=>{
+          this.db = e.target.result;
+          this.listarLibros();
+        };
+        indexDB.onerror = e=>{
+          console.error('ERROR al crear, abrir la BD',e);
+        };
+      },
+      abrirStore(store,modo){
+        let ltx = this.db.transaction(store,modo);
+        return ltx.objectStore(store);
+      }
+    
+    },
+    created(){
+        this.abrirBD();
+    }
+}).mount('#app')
+</script>
+</body>
+</html>

@@ -137,7 +137,7 @@ Vue.component('alumnos',{
                             </div>
                             <div class="col col md-6">
                             <input class="btn btn-warning" type="reset" value="Nuevo Registro">
-                            </div>
+                          </div>
                         </div>
                     </form>
                 </div>
