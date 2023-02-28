@@ -73,8 +73,9 @@ Vue.component('alumnos',{
               data = store.getAll();
             data.onsuccess = resp=>{
             this.alumnos = data.result.filter(alumno=>alumno.nombre.toLowerCase().indexOf(this.buscar.toLowerCase())>-1 || alumno.codigo.indexOf(this.buscar)>-1);
-        };
-    },
+          };
+        },
+  },
     template : `
     <div class="row">
         <div class="row justify-content-md-center">
