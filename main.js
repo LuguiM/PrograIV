@@ -23,6 +23,7 @@ app = new Vue({
             tblalumnos = req.createObjectStore('tblalumnos',{keyPath: 'idAlumno'}),
             tblmaterias = req.createObjectStore('tblmaterias',{keyPath: 'idMateria'});
             tbldocentes = req.createObjectStore('tbldocentes',{keyPath:'idDocente'})
+            tblmatriculas = req.createObjectStore('tblmatriculas',{keyPath:'idMatricula'})
             
             tblalumnos.createIndex('idAlumno','idAlumno',{unique:true});
             tblalumnos.createIndex('codigo','codigo',{unique:true});
@@ -46,4 +47,19 @@ app = new Vue({
   function abrirStore(store,modo){
     let ltx = db.transaction(store,modo);
     return ltx.objectStore(store);
+  }
+
+  async function seleccionarImagen(image){
+    let archivo = image.files[0];
+    if(archivo){
+        let blob = await img(archivo, 1),
+            reader = new FileReader();
+        reader.onload = e=>{
+          app.$refs.matricula.matricula.comprobante = e.target.result;
+          console.log(e.target.result);
+        };
+        reader.readAsDataURL(blob);
+    }else{
+      console.log("Por favor seleccione una imagen validad...");
+    }
   }

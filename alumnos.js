@@ -14,7 +14,9 @@ Vue.component('alumnos',{
             departamento:'',
             telefono:'',
             nacimiento:'',
-            sexo:''
+            sexo:'',
+            dui:'',
+            titulo:''
           }
         }
       },
@@ -30,6 +32,8 @@ Vue.component('alumnos',{
           this.alumno.telefono = '';
           this.alumno.nacimiento = '';
           this.alumno.sexo = '';
+          this.alumno.dui = '';
+          this.alumno.titulo ='';
         },
         modificarAlumno(alumno){
           this.accion = 'modificar';
@@ -133,6 +137,28 @@ Vue.component('alumnos',{
                             </div>
                         </div>
                         <div class="row p-1">
+                          <div class="col-3 col-md-2">
+                              <img :src='alumno.dui' width="50" height="50"/>
+                          </div>
+                        <div class="col-9 col-md-10">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupFile01">Subir DUI</label>
+                                <input type="file" accept="image/*" onChange="seleccionarImagen(this)" class="form-control" id="inputGroupFile01">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-1">
+                          <div class="col-3 col-md-2">
+                              <img :src='alumno.titulo' width="50" height="50"/>
+                          </div>
+                        <div class="col-9 col-md-10">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupFile01">Subir Titulo</label>
+                                <input type="file" accept="image/*" onChange="seleccionarImagen(this)" class="form-control" id="inputGroupFile01">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-1">
                             <div class="col col md-6">
                             <input class="btn btn-success" type="submit" value="Guardar Datos">
                             </div>
@@ -156,7 +182,7 @@ Vue.component('alumnos',{
                             <thead>
                             <tr>
                                 <th>BUSCAR</th>
-                                <th colspan="2"><input type="text" @keyup="listar()" class="form-control" 
+                                <th colspan="3"><input type="text" @keyup="listar()" class="form-control" 
                                 v-model="buscar" placeholder="Buscar por nombre"></th>
                             </tr>
                             <tr>
@@ -167,7 +193,9 @@ Vue.component('alumnos',{
                                 <th>DEPARTAMENTO</th>
                                 <th>TELEFONO</th>
                                 <th>FECHA DE NACIMIENTO</th>
-                                <th colspan="2">SEXO</th>
+                                <th>SEXO</th>
+                                <th>DUI</th>
+                                <th colspan="2">TITULO</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -180,6 +208,8 @@ Vue.component('alumnos',{
                                 <td>{{alumno.telefono}}</td>
                                 <td>{{alumno.nacimiento}}</td>
                                 <td>{{alumno.sexo}}</td>
+                                <td><img :src='alumno.dui' width="50" height="50" /></td>
+                                <td><img :src='alumno.titulo' width="50" height="50" /></td>
                                 <td><button @click.prevent="eliminarAlumno(alumno)" class="btn btn-danger">Eliminar</button></td>
                             </tr>
                             </tbody>
