@@ -2,7 +2,7 @@
 class DB_Conexion{
     private $conexion, $result, $preparado;
 
-    public function DB_Conexion($server, $user, $pass){
+    public function __construct($server, $user, $pass){
         $this -> conexion = new PDO($server, $user, $pass,
             array(PDO::ATTR_EMULATE_PREPARES=>false, PDO::ATTR_ERRMODE=>PDO::ERMODE_EXCEPTION)) or die('No se pudo conectar a la DB');
     }

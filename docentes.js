@@ -6,7 +6,7 @@ Vue.component('docentes',{
           docentes:[],
           accion: 'nuevo',
           docente:{
-            idAlumno:'',
+            idDocente:'',
             codigo:'',
             nombre:'',
             direccion:'',
@@ -19,9 +19,9 @@ Vue.component('docentes',{
         }
       },
       methods:{
-        nuevoAlumno(){
+        nuevoDocente(){
           this.accion = 'nuevo';
-          this.docente.idAlumno = '';
+          this.docente.idDocente = '';
           this.docente.codigo = '';
           this.docente.nombre = '';
           this.docente.direccion = '';
@@ -31,24 +31,29 @@ Vue.component('docentes',{
           this.docente.nacimiento = '';
           this.docente.sexo = '';
         },
-        modificarAlumno(docente){
+        modificarDocente(docente){
           this.accion = 'modificar';
           this.docente = docente;
           
         },
-        guardarAlumno(){
+        guardarDocente(){
           if(this.docente.nombre=='' || this.docente.codigo==''){
             console.log('Por favor ingrese los datos correspondientes');
             return;
           }
           let store = abrirStore('tbldocentes','readwrite');
           if(this.accion==='nuevo'){
-            this.docente.idAlumno = new Date().getTime().toString(16); //las cantidad milisegundo y lo convierte en hexadecimal
+            this.docente.idDocente = new Date().getTime().toString(16); //las cantidad milisegundo y lo convierte en hexadecimal
             
           }
           let query = store.put( JSON.parse( JSON.stringify(this.docente)));
           query.onsuccess = resp=>{
-            this.nuevoAlumno();
+            fetch(`private/modulos/docentes/docentes.php?accion=${this.accion}&docente=${JSON.stringify(this.docente)}`)
+                .then(resp=>resp.json())
+                .then(resp=>{
+                    console.log(resp);
+                });
+            this.nuevoDocente();
             this.listar();
           };
           query.onerror = err=>{
@@ -56,11 +61,16 @@ Vue.component('docentes',{
           };
           
         },
-        eliminarAlumno(docente){
+        eliminarDocente(docente){
           if(confirm(`Esta seguro de eliminar el docente ${docente.nombre}?`)){
             let store = abrirStore('tbldocentes','readwrite'),
-                req = store.delete(docente.idAlumno);
+                req = store.delete(docente.idDocente);
                 req.onsuccess = res=>{
+                  fetch(`private/modulos/docentes/docentes.php?accion=eliminar&docente=${JSON.stringify(this.docente)}`)
+                  .then(resp=>resp.json())
+                  .then(resp=>{
+                      console.log(resp);
+                });
                   this.listar();
                 };
                 req.onerror = err=>{
@@ -81,55 +91,55 @@ Vue.component('docentes',{
         <div class="row justify-content-md-center">
             <div class="col-12 col-md-6">
                 <div class="card border-primary" >
-                    <div class="card-header bg-primary text-white">Registro de Alumno</div>
+                    <div class="card-header bg-primary text-white">Registro de Docente</div>
                     <div class="card-body">
-                        <form id="frmAlumno" @submit.prevent="guardarAlumno" @reset.prevent="nuevoAlumno()">
+                        <form id="frmDocente" @submit.prevent="guardarDocente" @reset.prevent="nuevoDocente()">
                         <div class="row p-1">
                             <div class="col-3 col-md-2">CODIGO:</div>
                             <div class="col-9 col-md-3">
-                            <input class="form-control" type="text" v-model="docente.codigo" name="txtCodigoAlumno" id="txtCodigoAlumno">
+                            <input class="form-control" type="text" v-model="docente.codigo" name="txtCodigoDocente" id="txtCodigoDocente">
                             </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-3 col-md-2">NOMBRE:</div>
                             <div class="col col-md-6">
-                            <input class="form-control" v-model="docente.nombre" type="text" name="txtNombreAlumno" id="txtNombreAlumno">
+                            <input class="form-control" v-model="docente.nombre" type="text" name="txtNombreDocente" id="txtNombreDocente">
                             </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-3 col-md-2">DIRECCION:</div>
                             <div class="col col-md-6">
-                            <input class="form-control" v-model="docente.direccion" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno">
+                            <input class="form-control" v-model="docente.direccion" type="text" name="txtDireccionDocente" id="txtDireccionDocente">
                             </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-3 col-md-2">MUNICIPIO:</div>
                             <div class="col col-md-6">
-                            <input class="form-control" v-model="docente.municipio" type="text" name="txtMunicipioAlumno" id="txtMunicipioAlumno">
+                            <input class="form-control" v-model="docente.municipio" type="text" name="txtMunicipioDocente" id="txtMunicipioDocente">
                             </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-3 col-md-2">DEPARTAMENTO:</div>
                             <div class="col col-md-6">
-                            <input class="form-control" v-model="docente.departamento" type="text" name="txtDepartamentoAlumno" id="txtDepartamentoAlumno">
+                            <input class="form-control" v-model="docente.departamento" type="text" name="txtDepartamentoDocente" id="txtDepartamentoDocente">
                             </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-3 col-md-2">TELEFONO:</div>
                             <div class="col col-md-6">
-                            <input class="form-control" v-model="docente.telefono" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno">
+                            <input class="form-control" v-model="docente.telefono" type="text" name="txtTelefonoDocente" id="txtTelefonoDocente">
                             </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-3 col-md-2">FECHA DE NACIMIENTO:</div>
                             <div class="col col-md-6">
-                            <input class="form-control" v-model="docente.nacimiento" type="date" name="txtNacimientoAlumno" id="txtNacimientoAlumno">
+                            <input class="form-control" v-model="docente.nacimiento" type="date" name="txtNacimientoDocente" id="txtNacimientoDocente">
                             </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-3 col-md-2">SEXO:</div>
                             <div class="col col-md-6">
-                            <input class="form-control" v-model="docente.sexo" type="text" name="txtSexoAlumno" id="txtSexoAlumno">
+                            <input class="form-control" v-model="docente.sexo" type="text" name="txtSexoDocente" id="txtSexoDocente">
                             </div>
                         </div>
                         <div class="row p-1">
@@ -171,7 +181,7 @@ Vue.component('docentes',{
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="docente in docentes" @click='modificarAlumno(docente)' :key="docente.idAlumno" >
+                            <tr v-for="docente in docentes" @click='modificarDocente(docente)' :key="docente.idDocente" >
                                 <td>{{docente.codigo}}</td>
                                 <td>{{docente.nombre}}</td>
                                 <td>{{docente.direccion}}</td>
@@ -180,7 +190,7 @@ Vue.component('docentes',{
                                 <td>{{docente.telefono}}</td>
                                 <td>{{docente.nacimiento}}</td>
                                 <td>{{docente.sexo}}</td>
-                                <td><button @click.prevent="eliminarAlumno(docente)" class="btn btn-danger">Eliminar</button></td>
+                                <td><button @click.prevent="eliminarDocente(docente)" class="btn btn-danger">Eliminar</button></td>
                             </tr>
                             </tbody>
                         </table>
