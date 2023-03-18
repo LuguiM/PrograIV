@@ -1,4 +1,5 @@
 <?php
+
 include '../../config/config.php';
 extract($_REQUEST);
 $docente = isset($docente) ? $docente : '[]';
@@ -27,6 +28,10 @@ class Docente{
         if( empty($this->datos['nombre']) ){
             $this->respuesta['msg'] = 'Por favor digite su nombre';
         }
+        if( empty($this->datos['direccion']) ){
+            $this->respuesta['msg'] = 'Por favor digite su direeccon';
+        }
+
         return $this->administrar_docente();
     }
     private function administrar_docente(){
