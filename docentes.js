@@ -66,12 +66,12 @@ Vue.component('docentes',{
             let store = abrirStore('tbldocentes','readwrite'),
                 req = store.delete(docente.idDocente);
                 req.onsuccess = res=>{
-                  fetch(`private\modulos\docente\docentes.php?accion=eliminar&docente=${JSON.stringify(this.docente)}`)
-                  .then(resp=>resp.json())
-                  .then(resp=>{
-                      console.log(resp);
-                });
-                  this.listar();
+                  fetch(`private/modulos/docente/docentes.php?accion=eliminar&docente=${JSON.stringify(this.docente)}`)
+                    .then(resp=>resp.json())
+                    .then(resp=>{
+                        console.log(resp);
+                    });
+                this.listar();
                 };
                 req.onerror = err=>{
                   console.error('ERROR al guardar docente')
@@ -79,11 +79,29 @@ Vue.component('docentes',{
           }
         },
         listar(){
-          let store = abrirStore('tbldocentes','readonly'),
+          /*let store = abrirStore('tbldocentes','readonly'),
               data = store.getAll();
             data.onsuccess = resp=>{
             this.docentes = data.result.filter(docente=>docente.nombre.toLowerCase().indexOf(this.buscar.toLowerCase())>-1 || docente.codigo.indexOf(this.buscar)>-1);
-        };
+            
+          };*/
+          //fetch(`private/modulos/docente/docentes.php?accion=mostrar&docentes=${JSON.stringify(this.docente)}`)
+          fetch(`private\modulos\consulta\consulta.php`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error en la respuesta del servidor');
+            }
+            return response.text(); // Obtiene el contenido de la respuesta como texto
+          })
+          .then(data => {
+            try {
+              const jsonData = JSON.parse(data); // Convierte la respuesta a un objeto JSON
+              this.docentes = jsonData.docentes;
+            } catch (e) {
+              throw new Error('El contenido de la respuesta no es un objeto JSON válido');
+            }
+          })
+          .catch(error => console.log(error));
     },
   },
     template : `

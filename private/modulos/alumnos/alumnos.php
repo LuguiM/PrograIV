@@ -2,29 +2,29 @@
 
 include '../../config/config.php';
 extract($_REQUEST);
-$docente = isset($docente) ? $docente : '[]';
+$alumno = isset($alumno) ? $alumno : '[]';
 $accion = isset($accion) ? $accion : '';
-$class_docente = new Docente($conexion);
-print_r($class_docente->recibir_datos($docente));
+$class_alumno = new Alumno($conexion);
+print_r($class_alumno->recibir_datos($alumno));
 
-class Docente{
+class Alumno{
     public $datos=[], $db;
     public $respuesta = ['msg'=>'ok'];
 
     public function __construct($db){
         $this->db=$db;
     }
-    public function recibir_datos($docente){
-        $this->datos = json_decode($docente, true);
+    public function recibir_datos($alumno){
+        $this->datos = json_decode($alumno, true);
         return $this->validar_datos();
     }
     
     private function validar_datos(){
-        if( empty($this->datos['idDocente']) ){
+        if( empty($this->datos['idAlumno']) ){
             $this->respuesta['msg'] = 'NO se ha espesificado un ID';
         }
         if( empty($this->datos['codigo']) ){
-            $this->respuesta['msg'] = 'Por favor ingrese un codigo de docente, el codigo es un numero de 3 digitos';
+            $this->respuesta['msg'] = 'Por favor ingrese un codigo de alumno, el codigo es un numero de 3 digitos';
         }
         if( empty($this->datos['nombre']) ){
             $this->respuesta['msg'] = 'Por favor digite su nombre';
@@ -33,36 +33,36 @@ class Docente{
             $this->respuesta['msg'] = 'Por favor digite su direeccon';
         }
 
-        return $this->administrar_docente();
+        return $this->administrar_alumno();
     }
-    private function administrar_docente(){
+    private function administrar_alumno(){
         global $accion;
         if( $this->respuesta['msg']=='ok'){
             if($accion=='nuevo'){
                 $this->db->consultas('
-                INSERT INTO docentes(idDocente,codigo,nombre,direccion,municipio,departamento,telefono,nacimiento,sexo) VALUES(?,?,?,?,?,?,?,?,?)',
-                $this->datos['idDocente'],$this->datos['codigo'], $this->datos['nombre'],$this->datos['direccion'],
-                $this->datos['municipio'],$this->datos['departamento'],$this->datos['telefono'],$this->datos['nacimiento'],$this->datos['sexo']
+                INSERT INTO alumnos(idAlumno,codigo,nombre,direccion,municipio,departamento,telefono,nacimiento,sexo,dui,titulo) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                $this->datos['idAlumno'],$this->datos['codigo'], $this->datos['nombre'],$this->datos['direccion'],
+                $this->datos['municipio'],$this->datos['departamento'],$this->datos['telefono'],$this->datos['nacimiento'],$this->datos['sexo'],$this->datos['dui'],$this->datos['titulo']
             );
             return $this->db->obtener_respuesta();
             }else if ($accion=='modificar'){
                 $this->db->consultas('
-                UPDATE docentes SET codigo=?,nombre=?,direccion=?,municipio=?,departamento=?,telefono=?,nacimiento=?,sexo=? WHERE idDocente=?',
+                UPDATE alumnos SET codigo=?,nombre=?,direccion=?,municipio=?,departamento=?,telefono=?,nacimiento=?,sexo=? WHERE idAlumno=?',
                  $this->datos['nombre'],$this->datos['direccion'],
-                $this->datos['municipio'],$this->datos['departamento'],$this->datos['telefono'],$this->datos['nacimiento'],$this->datos['sexo'],$this->datos['idDocente']
+                $this->datos['municipio'],$this->datos['departamento'],$this->datos['telefono'],$this->datos['nacimiento'],$this->datos['sexo'],$this->datos['dui'],$this->datos['titulo'],$this->datos['idAlumno']
             );
             return $this->db->obtener_respuesta();
             }else if ($accion=='eliminar'){
                 $this->db->consultas('
                 DELETE
-                FROM docentes
-                WHERE docentes . idDocente=?',
-                $this->datos['idDocente']
+                FROM alumnos
+                WHERE alumnos . idAlumno=?',
+                $this->datos['idAlumno']
             );
             return $this->db->obtener_respuesta();
             }else if ($accion=='mostrar'){
                 $this->db->consultas('
-                SELECT codigo, nombre, direccion, municipio, departamento, telefono ,nacimiento ,sexo FROM docentes',
+                SELECT codigo, nombre, direccion, municipio, departamento, telefono ,nacimiento ,sexo FROM alumnos',
                 
                 
                 

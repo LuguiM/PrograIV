@@ -52,6 +52,11 @@ Vue.component('alumnos',{
           }
           let query = store.put( JSON.parse( JSON.stringify(this.alumno)));
           query.onsuccess = resp=>{
+            fetch(`private/modulos/alumnos/alumnos.php?accion=${this.accion}&alumno=${JSON.stringify(this.alumno)}`)
+            .then(resp=>resp.json())
+            .then(resp=>{
+                console.log(resp);
+            });
             this.nuevoAlumno();
             this.listar();
           };
@@ -65,6 +70,11 @@ Vue.component('alumnos',{
             let store = abrirStore('tblalumnos','readwrite'),
                 req = store.delete(alumno.idAlumno);
                 req.onsuccess = res=>{
+                  fetch(`private/modulos/alumnos/alumnos.php?accion=${this.accion}&alumno=${JSON.stringify(this.alumno)}`)
+                  .then(resp=>resp.json())
+                  .then(resp=>{
+                      console.log(resp);
+                  });
                   this.listar();
                 };
                 req.onerror = err=>{
