@@ -88,6 +88,9 @@ Vue.component('alumnos',{
             data.onsuccess = resp=>{
             this.alumnos = data.result.filter(alumno=>alumno.nombre.toLowerCase().indexOf(this.buscar.toLowerCase())>-1 || alumno.codigo.indexOf(this.buscar)>-1);
         };
+        fetch(`private/modulos/alumnos/alumnos.php`)
+          .then((response) => response.json())
+          .then((data)=> (this.docentes = data));
     },
   },
     template : `

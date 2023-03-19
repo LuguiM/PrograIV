@@ -1,11 +1,16 @@
 <?php
 
 include '../../config/config.php';
+include '../../modulos/consulta/consulta.php';
+
 extract($_REQUEST);
 $docente = isset($docente) ? $docente : '[]';
 $accion = isset($accion) ? $accion : '';
 $class_docente = new Docente($conexion);
 print_r($class_docente->recibir_datos($docente));
+
+$bd = new BaseDeDatos();
+$bd->obtener_registros('docentes');
 
 class Docente{
     public $datos=[], $db;
@@ -17,8 +22,8 @@ class Docente{
     public function recibir_datos($docente){
         $this->datos = json_decode($docente, true);
         return $this->validar_datos();
-    }
-    
+    } 
+
     private function validar_datos(){
         if( empty($this->datos['idDocente']) ){
             $this->respuesta['msg'] = 'NO se ha espesificado un ID';
@@ -60,19 +65,11 @@ class Docente{
                 $this->datos['idDocente']
             );
             return $this->db->obtener_respuesta();
-            }else if ($accion=='mostrar'){
-                $this->db->consultas('
-                SELECT codigo, nombre, direccion, municipio, departamento, telefono ,nacimiento ,sexo FROM docentes',
-                
-                
-                
-            );
-            return $this->db->obtener_respuesta();
-        
-        }else{
+            }else{
             return $this->respuesta;
         }
     }
 }
+
 }
 ?>

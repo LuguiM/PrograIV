@@ -1,6 +1,11 @@
 <?php
 
 include '../../config/config.php';
+include '../../modulos/consulta/consulta.php';
+
+$bd = new BaseDeDatos();
+$bd->obtener_registros('alumnos');
+
 extract($_REQUEST);
 $alumno = isset($alumno) ? $alumno : '[]';
 $accion = isset($accion) ? $accion : '';
@@ -60,16 +65,7 @@ class Alumno{
                 $this->datos['idAlumno']
             );
             return $this->db->obtener_respuesta();
-            }else if ($accion=='mostrar'){
-                $this->db->consultas('
-                SELECT codigo, nombre, direccion, municipio, departamento, telefono ,nacimiento ,sexo FROM alumnos',
-                
-                
-                
-            );
-            return $this->db->obtener_respuesta();
-        
-        }else{
+            }else{
             return $this->respuesta;
         }
     }
