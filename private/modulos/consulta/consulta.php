@@ -48,11 +48,4 @@ class BaseDeDatos {
   }
 }
 
-
-
-
-
-
-
-
 ?>
