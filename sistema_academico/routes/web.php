@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlumnoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +13,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::apiResources([
+    'alumnos'=>AlumnoController::Class,
+]);
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/alumno/{nombre}/{edad}', function($nombre='', $edad=0){
+    $msg = $edad>=18 ? 'Eres un adulto resposanble' : 'Aun no tienes compromisos';
+    return 'Hola, desde una ruta en laravel... '. $nombre. ' Msg: '. $msg;
+})->where(['edad'=>'^[0-9]{1,3}', 'nombre'=>'^[a-zA-Z]{3,85}']);

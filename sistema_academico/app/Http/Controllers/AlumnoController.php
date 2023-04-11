@@ -12,7 +12,8 @@ class AlumnoController extends Controller
      */
     public function index()
     {
-        //
+        //SELECT * FROM ALLUMNOS
+        return alumno::get();
     }
 
     /**
@@ -28,7 +29,9 @@ class AlumnoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //insert into alumnos..
+        Alumno::create($request->all());
+        return response()->json(['msg'=>'ok'],200);
     }
 
     /**
@@ -36,7 +39,8 @@ class AlumnoController extends Controller
      */
     public function show(Alumno $alumno)
     {
-        //
+        //select * form alumnos where idAlumno=?
+        return $alumno;
     }
 
     /**
@@ -52,7 +56,9 @@ class AlumnoController extends Controller
      */
     public function update(Request $request, Alumno $alumno)
     {
-        //
+        //update alumnos set ? where id=?
+        $alumno->update($request->all(), $request->all());
+        return response()->json(['msg'=>'ok'], 200);
     }
 
     /**
@@ -60,6 +66,8 @@ class AlumnoController extends Controller
      */
     public function destroy(Alumno $alumno)
     {
-        //
+        //delete alumnos from alumnos where id=?
+        $alumno->delete();
+        return response()->json(['msg'=>'ok'], 200);
     }
 }
