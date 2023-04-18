@@ -57,17 +57,22 @@ class AlumnoController extends Controller
     public function update(Request $request, Alumno $alumno)
     {
         //update alumnos set ? where id=?
-        $alumno->update($request->all(), $request->all());
+        $alumno::where('idAlumno',$request['idAlumno'])->update([
+            'codigo'=>$request['codigo'],
+            'nombre'=>$request['nombre']
+        ]);
+        //$alumno->update($request->all(), $request->all());
         return response()->json(['msg'=>'ok'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Alumno $alumno)
+    public function destroy(Request $request, Alumno $alumno)
     {
         //delete alumnos from alumnos where id=?
-        $alumno->delete();
+        //$alumno->delete();
+        $alumno::where('idAlumno', $request['idAlumno'])->delete();
         return response()->json(['msg'=>'ok'], 200);
     }
 }

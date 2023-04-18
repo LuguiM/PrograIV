@@ -16,14 +16,10 @@ class Alumno extends Model
      */
     protected $fillable = [
         'id',
+        'idAlumno',
         'codigo',
         'nombre',
-        'direccion',
-        'municipio',
-        'departamento',
-        'telefono',
-        'nacimiento',
-        'sexo'
+        
     ];
 
 }

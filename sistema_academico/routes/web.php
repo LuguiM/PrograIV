@@ -13,9 +13,16 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::apiResources([
+/*Route::apiResources([
     'alumnos'=>AlumnoController::Class,
-]);
+]);*/
+
+Route::controller(AlumnoController::class)->group(function(){
+    Route::get('/alumnos','index');
+    Route::post('/alumnos','store');
+    Route::put('/alumnos','update');
+    Route::delete('/alumnos','destroy');
+});
 
 Route::get('/', function () {
     return view('welcome');
