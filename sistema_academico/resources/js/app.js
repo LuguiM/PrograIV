@@ -1,12 +1,21 @@
 import './bootstrap';
 import { createApp } from 'vue';
 import alumnos from './components/AlumnoComponent.vue';
+import docentes from './components/DocenteComponent.vue';
+import materias from './components/MateriaComponent.vue';
+import matriculas from './components/MatriculaComponent.vue';
+
+
 window.db = '';
 
 const app = createApp({
-
+  
     components:{
         alumnos,
+        docentes,
+        materias,
+        matriculas,
+        
     },
     data(){
         return {
