@@ -4,6 +4,7 @@ import alumnos from './components/AlumnoComponent.vue';
 import docentes from './components/DocenteComponent.vue';
 import materias from './components/MateriaComponent.vue';
 import matriculas from './components/MatriculaComponent.vue';
+import inscripcion from './components/InscripcionComponent.vue';
 
 
 window.db = '';
@@ -15,6 +16,7 @@ const app = createApp({
         docentes,
         materias,
         matriculas,
+        inscripcion,
         
     },
     data(){
@@ -48,6 +50,9 @@ const app = createApp({
                     }),
                     tblmatriculas = req.createObjectStore('tblmatriculas', {
                         keyPath: 'idMatricula'
+                    });
+                    tblinscripcion = req.createObjectStore('tblinscripcion', {
+                        keyPath: 'idinscripcion'
                     });
                 tbldocentes.createIndex('idDocente', 'idDocente', {
                     unique: true

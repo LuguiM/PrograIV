@@ -41,6 +41,7 @@
                 <alumnos ref="alumno" v-show="forms['alumno'].mostrar"></alumnos>
                 <materias ref="materia" v-show="forms['materia'].mostrar"></materias>
                 <matriculas ref="matricula" v-show="forms['matricula'].mostrar"></matriculas>
+                <inscripcion ref="inscripcion" v-show="forms['inscripcion'].mostrar"></inscripcion>
                 <!--
                 
                 -->
