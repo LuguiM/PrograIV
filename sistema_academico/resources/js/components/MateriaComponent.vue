@@ -70,6 +70,8 @@
 </template>
 <script>
 import axios from 'axios';
+import alertify from 'alertifyjs'
+
     export default {
         data() {
             return {
@@ -114,6 +116,11 @@ import axios from 'axios';
                     method,
                     data: this.materia
                 }).then(resp=>{
+                    if(resp.data.msg!='ok'){
+                        alertify.error('Error al intentar sincronizar registro con el servidor: '+resp.data.msg)
+                    }else{
+                        alertify.success('Registro almacenado exitosamente')
+                    }
                     console.log(resp);
                 }).catch(err=>{
                     console.error(err);
@@ -135,6 +142,11 @@ import axios from 'axios';
                         method:'DELETE',
                         data: {idMateria: materia.idMateria}
                     }).then(resp=>{
+                        if(resp.data.msg!='ok'){
+                            alertify.error('Error al intentar eliminar el registro.');
+                        }else{
+                            alertify.succes('Registro eliminado exitosamente.')
+                        }
                         console.log(resp);
                     }).catch(err=>{
                         console.error(err);
