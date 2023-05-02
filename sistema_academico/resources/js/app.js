@@ -50,7 +50,7 @@ const app = createApp({
                     }),
                     tblmatriculas = req.createObjectStore('tblmatriculas', {
                         keyPath: 'idMatricula'
-                    });
+                    }),
                     tblinscripcion = req.createObjectStore('tblinscripcion', {
                         keyPath: 'idinscripcion'
                     });

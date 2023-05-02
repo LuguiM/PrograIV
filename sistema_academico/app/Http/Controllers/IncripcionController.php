@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Inscripcion;
 use Illuminate\Http\Request;
 
-class InscripcionController extends Controller
+class IncripcionController extends Controller
 {
     /**
      * Display a listing of the resource.

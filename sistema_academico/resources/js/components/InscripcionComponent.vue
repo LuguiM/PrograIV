@@ -123,7 +123,7 @@ import axios from 'axios';
                 inscripciones:[],
                 accion: 'nuevo',
                 inscripcion:{
-                    idInscripcion:'',
+                    idinscripcion:'',
                     codigo:'',
                     nombre:'',
                     direccion:'',
@@ -138,7 +138,7 @@ import axios from 'axios';
         methods:{
             nuevoInscripcion(){
                 this.accion = 'nuevo';
-                this.inscripcion.idInscripcion = '';
+                this.inscripcion.idinscripcion = '';
                 this.inscripcion.codigo = '';
                 this.inscripcion.nombre = '';
                 this.inscripcion.direccion = '';
@@ -162,10 +162,10 @@ import axios from 'axios';
                     method = 'PUT';//ACTUALIZAR
                 if( this.accion==='nuevo' ){
                     method = 'POST';//INSERTAR
-                    this.inscripcion.idInscripcion = new Date().getTime().toString(16);//las cantidad milisegundos y lo convierte en hexadecimal   
+                    this.inscripcion.idinscripcion = new Date().getTime().toString(16);//las cantidad milisegundos y lo convierte en hexadecimal   
                 }
                 axios({
-                    url:'docentes',
+                    url:'inscripcion',
                     method,
                     data: this.inscripcion
                 }).then(resp=>{
@@ -188,14 +188,14 @@ import axios from 'axios';
                     axios({
                         url:'inscripcion',
                         method:'DELETE',
-                        data: {idInscripcion: inscripcion.idInscripcion}
+                        data: {idinscripcion: inscripcion.idinscripcion}
                     }).then(resp=>{
                         console.log(resp);
                     }).catch(err=>{
                         console.error(err);
                     });
                     let store = this.abrirStore('tblinscripcion', 'readwrite'),
-                        req = store.delete(inscripcion.idInscripcion);
+                        req = store.delete(inscripcion.idinscripcion);
                     req.onsuccess = res=>{
                         this.listar();
                     };
@@ -208,7 +208,7 @@ import axios from 'axios';
                 let store = this.abrirStore('tblinscripcion', 'readonly'),
                     data = store.getAll();
                 data.onsuccess = resp=>{
-                    this.docentes = data.result
+                    this.inscripciones = data.result
                         .filter(inscripcion=>inscripcion.nombre.toLowerCase().indexOf(this.buscar.toLowerCase())>-1 || 
                             inscripcion.codigo.indexOf(this.buscar)>-1);
                 };
