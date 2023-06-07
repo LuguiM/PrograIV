@@ -40,6 +40,7 @@
                             <a class="nav-link" @click="abrirCerrarFormulario('materia')" href="#">Materia</a>
                             <a class="nav-link" @click="abrirCerrarFormulario('matricula')" href="#">Matricula</a>
                             <a class="nav-link" @click="abrirCerrarFormulario('inscripcion')" href="#">Inscripcion</a>
+                            <a class="nav-link" @click="abrirCerrarFormulario('chat')" href="#">Chat</a>
                         </div>
                     </div>
                 </div>
@@ -50,6 +51,7 @@
                 <materias ref="materia" v-show="forms['materia'].mostrar"></materias>
                 <matriculas ref="matricula" v-show="forms['matricula'].mostrar"></matriculas>
                 <inscripcion ref="inscripcion" v-show="forms['inscripcion'].mostrar"></inscripcion>
+                <chat ref="chat" v-show="forms['chat'].mostrar"></chat>
                 <!--
                 
                 -->
@@ -57,6 +59,7 @@
         </div>
         <br>
 
+        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>    
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
         <!--<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>Vue 2-->

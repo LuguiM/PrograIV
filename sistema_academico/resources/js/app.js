@@ -5,7 +5,12 @@ import docentes from './components/DocenteComponent.vue';
 import materias from './components/MateriaComponent.vue';
 import matriculas from './components/MatriculaComponent.vue';
 import inscripcion from './components/InscripcionComponent.vue';
-
+import chat from './components/ChatComponent.vue';
+window.db='';
+window.socketio = io('http://127.0.0.1:3001');
+socketio.on('conect', socket=>{
+    console.log('conectado a nodejs en puerto 3001');
+});
 
 window.db = '';
 
@@ -17,7 +22,7 @@ const app = createApp({
         materias,
         matriculas,
         inscripcion,
-        
+        chat,
     },
     data(){
         return {
@@ -27,6 +32,7 @@ const app = createApp({
                 alumno:{ mostrar:false, },
                 matricula:{ mostrar:false, },
                 inscripcion:{ mostrar:false, },
+                chat:{mostrar:false,},
             }
         }
     },
@@ -76,6 +82,7 @@ const app = createApp({
 });
 
 import ExampleComponent from './components/ExampleComponent.vue';
+
 app.component('example-component', ExampleComponent);
 
 
